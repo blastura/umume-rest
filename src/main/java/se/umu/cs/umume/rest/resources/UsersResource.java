@@ -27,9 +27,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+
+import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.util.LDAPUtils;
 import javax.naming.NamingException;
 import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Context;
 
@@ -37,18 +42,36 @@ import javax.ws.rs.core.Context;
 @Path("/users/{uid}")
 public class UsersResource {
 
+//    // The Java method will process HTTP GET requests
+//    @GET
+//    @Produces({"application/xml", "text/plain;charset=UTF-8"})
+//    public String getUser(@Context UriInfo uriInfo,
+//                          @PathParam("uid") String uid) {
+//        try {
+//            URI uri =  uriInfo.getAbsolutePath();
+//            String result = LDAPUtils.toString(LDAPUtils.searchForUid(uid));
+//            if (result.isEmpty()) {
+//                throw new WebApplicationException(404);
+//            }
+//            return "URI: " + uri + "\n" + result;
+//        } catch (NamingException e) {
+//            throw new WebApplicationException(e, 500);
+//        }
+//    }
+    
     // The Java method will process HTTP GET requests
     @GET
-    @Produces("text/plain;charset=UTF-8")
-    public String getUser(@Context UriInfo uriInfo,
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public PersonBean getUserXML(@Context UriInfo uriInfo,
                           @PathParam("uid") String uid) {
         try {
             URI uri =  uriInfo.getAbsolutePath();
-            String result = LDAPUtils.toString(LDAPUtils.searchForUid(uid));
+            List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
             if (result.isEmpty()) {
                 throw new WebApplicationException(404);
             }
-            return "URI: " + uri + "\n" + result;
+            result.get(0).setResourceRef(uri);
+            return result.get(0);
         } catch (NamingException e) {
             throw new WebApplicationException(e, 500);
         }

@@ -53,11 +53,11 @@ public class LDAPUtils {
 
 		return doLDAPSearch(searchBase, searchAttrs, matchingAttributes);
 	}
-	
+
 	public static List<PersonBean> toPersonBeans(final NamingEnumeration<SearchResult> resultEnum) {
 		try {
 			List<PersonBean> resultList = new ArrayList<PersonBean>();
-         // Print result
+			// Print result
 			if (!resultEnum.hasMore()) {
 				return resultList;
 			}
@@ -65,16 +65,41 @@ public class LDAPUtils {
 			while (resultEnum.hasMore()) {
 				Attributes attrs = resultEnum.next().getAttributes();
 				PersonBean person = new PersonBean();
-            
-            // Get all duplicate attributes from current attribute
-            for (NamingEnumeration<?> ea = attrs.get("mail").getAll(); ea.hasMore();) {
-                //sb.append("\t\t" + ea.next() + "\n");
-            }
-         }
+
+				// Get name
+				String givenName = (String) attrs.get("givenName").get();
+				// TODO: verify "sn"
+				String familyName = (String) attrs.get("sn").get();
+				person.setGivenName(givenName);
+				person.setFamilyName(familyName);
+				
+//				private String givenName;
+//				private String familyName;
+//				private List<String> emails;
+//				private String floor;
+//				private String street;
+//				private String postalCode;
+//				private String institution;
+//				private String roomNumber;
+//				private String phoneNumber;
+				
+				// Get all mails
+				NamingEnumeration<?> mailEnum = attrs.get("mail").getAll();
+				if (mailEnum.hasMore()) {
+					List<String> emails = new ArrayList<String>();
+					while (mailEnum.hasMore()) {
+						//sb.append("\t\t" + ea.next() + "\n");
+						//System.out.println("\t\tmail: " + mailEnum.next());
+						emails.add((String) mailEnum.next());
+					}
+					person.setEmails(emails);
+				}
+				resultList.add(person);
+			}
 			return resultList;
 		} catch (NamingException e) {
 			// TODO - fix error message
-          throw new Error("TODO: fix");
+			throw new Error("TODO: fix");
 		}
 	}
 
