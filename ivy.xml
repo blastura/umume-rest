@@ -21,6 +21,10 @@
       
       <dependency org="com.sun.jersey" name="jersey-server" rev="1.0.3" />
       
+      <!-- bindings -->
+      <dependency org="com.sun.jersey" name="jersey-json" rev="1.0.3" />
+      <dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" />
+
       <!-- Logging -->
       <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8"/>
       <dependency org="ch.qos.logback" name="logback-classic" rev="0.9.17"/>
