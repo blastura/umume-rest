@@ -1,0 +1,29 @@
+<ivy-module version="2.0">
+   <info organisation="org.apache" module="chained-resolvers"/>
+   <configurations defaultconfmapping="default">
+      <conf name="default" description="Runtime configuration"/>
+      <!-- <conf name="compile" visibility="private" extends="default"/> -->
+      <conf name="test" visibility="private" extends="default"/>
+   </configurations>
+   <dependencies>
+      <!-- Testing -->
+      <dependency org="junit" name="junit" rev="4.4" conf="test->default"/>
+      <dependency org="com.sun.jersey.test.framework"
+                  name="jersey-test-framework"
+                  rev="1.0.3"
+                  conf="test->default" />
+
+      <!-- server -->
+      <dependency org="com.sun.grizzly"
+                  name="grizzly-servlet-webserver"
+                  rev="1.9.9"
+                  conf="test->default"/>
+      
+      <dependency org="com.sun.jersey" name="jersey-server" rev="1.0.3" />
+      
+      <!-- Logging -->
+      <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8"/>
+      <dependency org="ch.qos.logback" name="logback-classic" rev="0.9.17"/>
+      <dependency org="ch.qos.logback" name="logback-classic" rev="0.9.17"/>
+   </dependencies>
+</ivy-module>

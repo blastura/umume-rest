@@ -1,0 +1,15 @@
+<ivysettings>
+   <settings defaultResolver="maven" />
+   <resolvers>
+      <chain name="maven" returnFirst="true">
+         <!-- <ibiblio name="restlet" root="http://maven.restlet.org/" m2compatible="true" /> -->
+         <ibiblio name="maven1" root="http://download.java.net/maven/1" m2compatible="false" />
+         <ibiblio name="maven2" root="http://download.java.net/maven/2/" m2compatible="true" />
+         <ibiblio name="ibiblio" m2compatible="true" />
+      </chain>
+      <!--     <filesystem name="local"> -->
+      <!--       <ivy pattern="${user.home}/ivyrep/[organisation]/[module]/[revision]/ivy.xml"/> -->
+      <!--       <artifact pattern="${user.home}/ivyrep/[organisation]/[module]/[revision]/[artifact].[ext]"/> -->
+      <!--     </filesystem> -->
+   </resolvers>
+</ivysettings>

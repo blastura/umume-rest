@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>umume-rest</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>classes</name>
+			<type>2</type>
+			<location>/Users/anton/Documents/skola/soa/umume/umume-rest/target/classes</location>
+		</link>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>/Users/anton/Documents/skola/soa/umume/umume-rest/src/main/java</location>
+		</link>
+		<link>
+			<name>test-classes</name>
+			<type>2</type>
+			<location>/Users/anton/Documents/skola/soa/umume/umume-rest/target/test-classes</location>
+		</link>
+	</linkedResources>
+</projectDescription>

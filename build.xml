@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Umume-REST" default="compile" basedir="."
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+
+   <property file="conf/build.properties" />
+
+   <!-- Dir Properties -->
+   <property name="build.dir" location="target"/>
+   <property name="build.main.dir" location="${build.dir}/classes"/>
+   <property name="build.test.dir" location="${build.dir}/test-classes"/>
+   <property name="dist.dir" location="${build.dir}/dist"/>
+   <property name="conf.dir" location="conf"/>
+
+   <property name="src.dir" location="src"/>
+   <property name="src.main.dir" location="${src.dir}/main/java"/>
+   <property name="src.test.dir" location="${src.dir}/test/java"/>
+   <property name="webapp.dir" value="${src.dir}/main/webapp"/>
+
+   <property name="doc.dir" location="doc"/>
+   <property name="lib.dir" location="lib"/>
+
+   <!-- Dir program resources -->
+   <property name="src.main.resources.dir" location="${src.main.dir}/../resources"/>
+   <property name="src.test.resources.dir" location="${src.test.dir}/../resources"/>
+   <property name="build.main.resources.dir" location="${build.main.dir}"/>
+   <property name="build.test.resources.dir" location="${build.test.dir}"/>
+
+   <target name="prepare">
+      <mkdir dir="${build.main.dir}"/>
+      <mkdir dir="${lib.dir}"/>
+      <mkdir dir="${build.test.dir}"/>
+   </target>
+
+   <!-- Classpath -->
+   <path id="project.classpath">
+      <pathelement location="${build.main.dir}" />
+      <pathelement location="${build.test.dir}" />
+      <fileset dir="${lib.dir}">
+         <include name="**/*.jar"/>
+      </fileset>
+   </path>
+
+   <!-- Remove build files -->
+   <target name="clean">
+      <delete dir="${build.dir}" />
+   </target>
+
+   <!-- Compile program -->
+   <target name="compile" depends="prepare">
+      <!-- Compile source -->
+      <javac srcdir="${src.main.dir}" destdir="${build.main.dir}" debug="on">
+         <classpath refid="project.classpath" />
+         <compilerarg value="-Xlint:unchecked"/>
+      </javac>
+
+      <!-- Copy resource dirs -->
+      <copy todir="${build.main.resources.dir}" overwrite="false">
+         <fileset dir="${src.main.resources.dir}">
+            <exclude name="web.xml" />
+         </fileset>
+      </copy>
+   </target>
+   
+   <target name="war" depends="compile">
+      <mkdir dir="${dist.dir}"/>
+      <!-- web.xml -->
+      <copy file="${src.main.resources.dir}/web.xml"
+            tofile="${dist.dir}/WEB-INF/web.xml"/>
+
+      <!-- copy classes -->
+      <copy todir="${dist.dir}/WEB-INF/classes">
+         <fileset dir="${build.main.dir}"/>
+      </copy>
+
+      <!-- libs -->
+      <copy todir="${dist.dir}/WEB-INF/lib">
+         <fileset dir="${lib.dir}/default" includes="**/*.jar"/>
+      </copy>
+
+      <!-- create war -->
+      <war destfile="${project.name}.war"
+           webxml="${dist.dir}/WEB-INF/web.xml">
+         <fileset dir="${dist.dir}">
+            <include name="**/*.*"/>
+         </fileset>
+      </war>
+   </target>
+   
+   <target name="deploy" depends="war">
+      <move file="${project.name}.war"
+            todir="${deploy.dir}"/>
+   </target>
+   
+   <!-- Compile tests -->
+   <target name="compile-tests" depends="compile">
+      <!-- Copy resource dirs to standard resource dir, overwrite
+           existing resources -->
+      <javac srcdir="${src.test.dir}" destdir="${build.test.dir}">
+         <classpath refid="project.classpath" />
+      </javac>
+      <copy todir="${build.test.resources.dir}" preservelastmodified="true">
+         <fileset dir="${src.test.resources.dir}"/>
+      </copy>
+   </target>
+
+   <!-- Run tests -->
+   <target name="test" depends="compile-tests">
+      <junit printsummary="on"
+             haltonfailure="false"
+             failureproperty="tests.failed"
+             dir="${build.test.dir}"
+             fork="false">
+         <classpath refid="project.classpath" />
+         <formatter type="plain" usefile="false" />
+         <batchtest>
+            <!-- Run junit tests on all classes with filenames that end with -->
+            <!-- Test.class -->
+            <fileset dir="${build.test.dir}"
+                     includes="**/*Test.class" />
+         </batchtest>
+         <sysproperty key="doc.dir" value="${doc.dir}" />
+         <sysproperty key="index.dir" value="${index.dir}" />
+         <sysproperty key="logback.root.level" value="OFF" />
+      </junit>
+      <fail if="tests.failed">
+         tests.failed=${tests.failed}
+         ***********************************************************
+         ***********************************************************
+         ****  One or more tests failed!  Check the output ...  ****
+         ***********************************************************
+         ***********************************************************
+      </fail>
+   </target>
+
+   <!-- Generate javadoc -->
+   <target name="javadoc" description="Generaties javadoc">
+      <javadoc destdir="${doc.dir}">
+         <classpath refid="project.classpath" />
+         <fileset dir="${src.dir}/" includes="**/*.java"/>
+      </javadoc>
+   </target>
+
+   <!-- Print classpath -->
+   <target name="print-classpath" description="Prints classpath, convenient for export to emacs and jde-mode">
+      <property name="classpath" refid="project.classpath"/>
+      <echo message="-classpath-${classpath}-classpath-"/>
+   </target>
+
+   <!-- ====================================================================== -->
+   <!-- Ivy dependencies                                                       -->
+   <!-- ====================================================================== -->
+   <property name="ivy.install.version" value="2.1.0"/>
+   <property name="ivy.jar.dir" value="${conf.dir}/ivy"/>
+   <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
+
+   <target name="resolve" description="Download project dependencies"
+           xmlns:ivy="antlib:org.apache.ivy.ant"
+           depends="prepare-ivy, install-ivy">
+      <ivy:settings file="ivysettings.xml" />
+      <ivy:retrieve pattern="lib/[conf]/[artifact]-[revision].[ext]" />
+   </target>
+
+   <target name="prepare-ivy">
+      <mkdir dir="${conf.dir}/ivy"/>
+   </target>
+
+   <target name="download-ivy" unless="skip.download">
+      <echo message="Downloading ivy..."/>
+      <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+           dest="${ivy.jar.file}" usetimestamp="true"/>
+   </target>
+
+   <target name="install-ivy" depends="download-ivy" description="--> install ivy">
+      <path id="ivy.lib.path">
+         <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+      </path>
+      <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+   </target>
+</project>
