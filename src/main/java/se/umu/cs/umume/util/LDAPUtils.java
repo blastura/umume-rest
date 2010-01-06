@@ -19,6 +19,11 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.Attribute;
 
 import se.umu.cs.umume.PersonBean;
+import twitter4j.Paging;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
 import java.util.ArrayList;
 
 /**
@@ -65,7 +70,10 @@ public class LDAPUtils {
 			while (resultEnum.hasMore()) {
 				Attributes attrs = resultEnum.next().getAttributes();
 				PersonBean person = new PersonBean();
-
+				
+				
+				person.setTweets(getTweets("javve"));
+				
 				// Get name
 				String givenName = (String) attrs.get("givenName").get();
 				// TODO: verify "sn"
@@ -102,7 +110,24 @@ public class LDAPUtils {
 			throw new Error("TODO: fix");
 		}
 	}
-
+	
+    public static List<String> getTweets(String userName) {
+        Twitter twitter = new Twitter("umume", "soasoa");
+        List<Status> statuses = new ArrayList<Status>();
+        try {
+            statuses = twitter.getUserTimeline(userName, new Paging(1));
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
+        
+        // Convert from Status to String
+        List<String> stringStatuses = new ArrayList<String>();
+        for(Status status : statuses) {
+            stringStatuses.add(status.getText());
+        }
+        return stringStatuses;
+    }
+    
 	public static String toString(final NamingEnumeration<SearchResult> resultEnum) {
 		try {
 			StringBuffer sb = new StringBuffer();

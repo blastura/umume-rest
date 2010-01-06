@@ -30,13 +30,20 @@ import javax.ws.rs.WebApplicationException;
 
 import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.util.LDAPUtils;
+import twitter4j.Paging;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
 import javax.naming.NamingException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Context;
+
 
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/users/{uid}")
