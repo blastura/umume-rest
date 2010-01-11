@@ -15,7 +15,6 @@ public class PersonBean {
     private String givenName;
     private String familyName;
     private List<String> emails;
-    private List<String> tweets;
     private String floor;
     private String street;
     private String postalCode;
@@ -52,8 +51,6 @@ public class PersonBean {
     public void setEmails(List<String> emails) {
         this.emails = emails;
     }
-    
-    
     public String getFloor() {
         return floor;
     }
@@ -89,6 +86,91 @@ public class PersonBean {
     }
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((emails == null) ? 0 : emails.hashCode());
+        result = prime * result
+            + ((familyName == null) ? 0 : familyName.hashCode());
+        result = prime * result + ((floor == null) ? 0 : floor.hashCode());
+        result = prime * result
+            + ((givenName == null) ? 0 : givenName.hashCode());
+        result = prime * result
+            + ((institution == null) ? 0 : institution.hashCode());
+        result = prime * result
+            + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+        result = prime * result
+            + ((postalCode == null) ? 0 : postalCode.hashCode());
+        result = prime * result
+            + ((resourceRef == null) ? 0 : resourceRef.hashCode());
+        result = prime * result
+            + ((roomNumber == null) ? 0 : roomNumber.hashCode());
+        result = prime * result + ((street == null) ? 0 : street.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PersonBean other = (PersonBean) obj;
+        if (emails == null) {
+            if (other.emails != null)
+                return false;
+        } else if (!emails.equals(other.emails))
+            return false;
+        if (familyName == null) {
+            if (other.familyName != null)
+                return false;
+        } else if (!familyName.equals(other.familyName))
+            return false;
+        if (floor == null) {
+            if (other.floor != null)
+                return false;
+        } else if (!floor.equals(other.floor))
+            return false;
+        if (givenName == null) {
+            if (other.givenName != null)
+                return false;
+        } else if (!givenName.equals(other.givenName))
+            return false;
+        if (institution == null) {
+            if (other.institution != null)
+                return false;
+        } else if (!institution.equals(other.institution))
+            return false;
+        if (phoneNumber == null) {
+            if (other.phoneNumber != null)
+                return false;
+        } else if (!phoneNumber.equals(other.phoneNumber))
+            return false;
+        if (postalCode == null) {
+            if (other.postalCode != null)
+                return false;
+        } else if (!postalCode.equals(other.postalCode))
+            return false;
+        if (resourceRef == null) {
+            if (other.resourceRef != null)
+                return false;
+        } else if (!resourceRef.equals(other.resourceRef))
+            return false;
+        if (roomNumber == null) {
+            if (other.roomNumber != null)
+                return false;
+        } else if (!roomNumber.equals(other.roomNumber))
+            return false;
+        if (street == null) {
+            if (other.street != null)
+                return false;
+        } else if (!street.equals(other.street))
+            return false;
+        return true;
     }
     
 
