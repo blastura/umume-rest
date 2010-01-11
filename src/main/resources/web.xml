@@ -22,10 +22,19 @@
          <param-name>casServerLoginUrl</param-name>
          <param-value>https://cas.umu.se/login</param-value>
       </init-param>
+      <init-param>
+         <param-name>service</param-name>
+         <param-value>http://localhost:8080/UmuMeREST/users/aonjon04</param-value>
+      </init-param>
+      <init-param>
+         <param-name>serverName</param-name>
+         <param-value>https://localhost:8080</param-value>
+      </init-param>
    </filter>
 
    <filter-mapping>
       <filter-name>CAS Authentication Filter</filter-name>
-      <url-pattern>/*</url-pattern>
+      <url-pattern>/users/*</url-pattern>
+      <!-- <http-method>PUT</http-method> -->
    </filter-mapping>
 </web-app>

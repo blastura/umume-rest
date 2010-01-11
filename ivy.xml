@@ -23,6 +23,7 @@
       <dependency org="net.homeip.yusuke"
                   name="twitter4j"
                   rev="2.0.10" />
+      
       <!-- CAS Jasig -->
       <dependency org="org.jasig.cas"
                   name="cas-client-core"
@@ -36,6 +37,8 @@
 
       <!-- Logging -->
       <dependency org="log4j" name="log4j" rev="1.2.12"/>
+      <!-- For CAS-Client... -->
+      <dependency org="commons-logging" name="commons-logging" rev="1.1.1"/>
       <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8"/>
       <dependency org="ch.qos.logback" name="logback-classic" rev="0.9.17"/>
       <dependency org="ch.qos.logback" name="logback-classic" rev="0.9.17"/>

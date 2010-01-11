@@ -6,6 +6,7 @@
          <ibiblio name="maven1" root="http://download.java.net/maven/1" m2compatible="false" />
          <ibiblio name="maven2" root="http://download.java.net/maven/2/" m2compatible="true" />
          <ibiblio name="twitter" root="http://yusuke.homeip.net/maven2" m2compatible="true" />
+         <ibiblio name="jasig" root="http://developer.jasig.org/repo/content/repositories/m2" m2compatible="true" />
          <ibiblio name="ibiblio" m2compatible="true" />
       </chain>
       <!--     <filesystem name="local"> -->
