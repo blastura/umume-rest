@@ -15,6 +15,7 @@ public class PersonBean {
     private String givenName;
     private String familyName;
     private List<String> emails;
+    private List<String> tweets;
     private String floor;
     private String street;
     private String postalCode;
@@ -172,7 +173,6 @@ public class PersonBean {
             return false;
         return true;
     }
-    
 
     @XmlElementWrapper(name="tweets")
     @XmlElements({@XmlElement(name="tweet")})

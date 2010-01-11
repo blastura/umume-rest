@@ -19,6 +19,11 @@
                   rev="1.9.9"
                   conf="test->default"/>
       
+      <!-- Twitter -->
+      <dependency org="net.homeip.yusuke"
+                  name="twitter4j"
+                  rev="2.0.10" />
+      
       <dependency org="com.sun.jersey" name="jersey-server" rev="1.0.3" />
       
       <!-- bindings -->
