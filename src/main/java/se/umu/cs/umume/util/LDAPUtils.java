@@ -78,6 +78,9 @@ public class LDAPUtils {
             String familyName = (String) attrs.get("sn").get();
             person.setGivenName(givenName);
             person.setFamilyName(familyName);
+            
+            String uid = (String) attrs.get("uid").get();
+            person.setUid(uid);
 
             //private String floor;
             Attribute floorAttr = attrs.get("floor");

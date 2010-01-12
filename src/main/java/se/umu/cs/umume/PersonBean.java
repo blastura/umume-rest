@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name="person")
 public class PersonBean {
     private URI resourceRef;
+    private String uid;
     private String givenName;
     private String familyName;
     private URI photoURI;
@@ -213,5 +214,11 @@ public class PersonBean {
     }
     public void setPhotoURI(URI photoURI) {
         this.photoURI = photoURI;
+    }
+    public String getUid() {
+        return uid;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
