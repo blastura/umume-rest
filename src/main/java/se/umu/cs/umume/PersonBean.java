@@ -8,7 +8,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlType
 @XmlRootElement(name="person")
 public class PersonBean {
     private URI resourceRef;
@@ -16,6 +18,7 @@ public class PersonBean {
     private String familyName;
     private List<String> emails;
     private List<String> tweets;
+    private String twitterName;
     private String floor;
     private String street;
     private String postalCode;
@@ -181,9 +184,11 @@ public class PersonBean {
     public List<String> getTweets() {
         return tweets;
     }
+    
     public void setTweets(List<String> tweets) {
         this.tweets = tweets;
     }
+
     public void setTwitterName(String twitterName) {
         this.twitterName = twitterName;
     }

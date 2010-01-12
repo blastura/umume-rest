@@ -35,7 +35,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.persistance.PersistanceLayer;
@@ -68,8 +70,9 @@ public class UsersResource {
     
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    public void updateUser() {
-        System.err.println("PUT PU TPU T");
-        
+    public Response updateUser(PersonBean pb) {
+        System.err.println("Name: " + pb.getGivenName());
+        Response r = Response.status(Status.OK).build();
+        return r;
     }
 }
