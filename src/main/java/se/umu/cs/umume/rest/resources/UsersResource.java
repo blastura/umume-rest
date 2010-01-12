@@ -38,7 +38,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.persistance.PersistanceLayer;
 import se.umu.cs.umume.util.LDAPUtils;
+import se.umu.cs.umume.util.TwitterUtils;
 
 @Path("/users/{uid}")
 public class UsersResource {
@@ -52,6 +54,8 @@ public class UsersResource {
         try {
             URI uri =  uriInfo.getAbsolutePath();
             List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
+            PersistanceLayer.addDatabaseInfo(result);
+            TwitterUtils.getTweets(result);
             if (result.isEmpty()) {
                 throw new WebApplicationException(404);
             }
