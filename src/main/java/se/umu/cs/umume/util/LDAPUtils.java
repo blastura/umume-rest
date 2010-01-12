@@ -5,6 +5,8 @@
 
 package se.umu.cs.umume.util;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -18,6 +20,9 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.Attribute;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.umu.cs.umume.PersonBean;
 
 import java.util.ArrayList;
@@ -28,26 +33,27 @@ import java.util.ArrayList;
  */
 public class LDAPUtils {
     private static final String URL = "ldap://ldap.umu.se";
+    private static final Logger logger = LoggerFactory.getLogger(LDAPUtils.class);
 
-    public static NamingEnumeration<SearchResult> doLDAPSearch(String searchBase, Attributes searchAttrs,
-            String[] matchingAttributes) throws NamingException {
+    private static LdapContext createLdapContext() throws NamingException {
         // Setup connection
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY,
         "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, URL);
 
-        LdapContext context = new InitialLdapContext(env, null);
+        return new InitialLdapContext(env, null);
+    }
 
+    private static NamingEnumeration<SearchResult> doLDAPSearch(String searchBase, Attributes searchAttrs,
+            String[] matchingAttributes) throws NamingException {
+        LdapContext context = createLdapContext();
         // Perform search
-        NamingEnumeration<SearchResult> resultEnum = context.search(searchBase, searchAttrs, matchingAttributes);
-        return resultEnum;
+        return  context.search(searchBase, searchAttrs, matchingAttributes);
     }
 
     public static NamingEnumeration<SearchResult> searchForUid(final String uid) throws NamingException {
         String searchBase = "cn=person,dc=umu,dc=se";
-        // Filter (&(objectClass=organizationalUnit)(umuSeAccountNumber=3300))
-        // TODO: verify that departments are all of class organizationalUnit
         Attributes searchAttrs = new BasicAttributes("uid", uid);
         // Change to specified number/string
         String[] matchingAttributes = {"*"};//{searchAttrString};
@@ -74,26 +80,75 @@ public class LDAPUtils {
                 person.setGivenName(givenName);
                 person.setFamilyName(familyName);
 
-                //				private String givenName;
-                //				private String familyName;
-                //				private List<String> emails;
-                //				private String floor;
-                //				private String street;
-                //				private String postalCode;
-                //				private String institution;
-                //				private String roomNumber;
-                //				private String phoneNumber;
+                //private String floor;
+                Attribute floorAttr = attrs.get("floor");
+                if (floorAttr != null) {
+                    person.setFloor((String) floorAttr.get());
+                }
+                //private String street;
+                Attribute streetAttr = attrs.get("street");
+                if (streetAttr != null) {
+                    person.setStreet((String) streetAttr.get());
+                }
+                //private String postalCode;
+                Attribute postalCodeAttr = attrs.get("postalCode");
+                if (postalCodeAttr != null) {
+                    person.setPostalCode((String) postalCodeAttr.get());
+                }
+                //private String institution;
+                Attribute institutionAttr = attrs.get("institution");
+                if (institutionAttr != null) {
+                    person.setInstitution((String) institutionAttr.get());
+                }
+
+                //private String buildingName;
+                Attribute buildingNameAttr = attrs.get("buildingName");
+                if (buildingNameAttr != null) {
+                    person.setBuildingName((String) buildingNameAttr.get());
+                }
+
+                //private String roomNumber;
+                Attribute roomNumberAttr = attrs.get("roomNumber");
+                if (roomNumberAttr != null) {
+                    person.setRoomNumber((String) roomNumberAttr.get());
+                }
+                //private String phoneNumber;
+                Attribute phoneNumberAttr = attrs.get("telephoneNumber");
+                if (phoneNumberAttr != null) {
+                    person.setPhoneNumber((String) phoneNumberAttr.get());
+                }
+                //private String photoURI;
+                Attribute photoURIAttr = attrs.get("labeledURI");
+                if (photoURIAttr != null) {
+                    NamingEnumeration<?> uriEnum = photoURIAttr.getAll();
+                    while (uriEnum.hasMore()) {
+                        String content = (String) uriEnum.next();
+                        int i = content.indexOf("(photo");
+                        if (i > 0) {
+                            content = content.substring(0, i).trim();
+                            try {
+                                person.setPhotoURI(new URI(content));
+                            } catch (URISyntaxException e) {
+                                logger.warn("photoURI not URI: {}", content);
+                            }
+                            break;
+                        }
+                    }
+                }
 
                 // Get all mails
-                NamingEnumeration<?> mailEnum = attrs.get("mail").getAll();
-                if (mailEnum.hasMore()) {
-                    List<String> emails = new ArrayList<String>();
-                    while (mailEnum.hasMore()) {
-                        //sb.append("\t\t" + ea.next() + "\n");
-                        //System.out.println("\t\tmail: " + mailEnum.next());
-                        emails.add((String) mailEnum.next());
+                Attribute mailAttr = attrs.get("mail");
+                if (mailAttr != null) {
+                    NamingEnumeration<?> mailEnum = mailAttr.getAll();
+                    if (mailEnum.hasMore()) {
+                        List<String> emails = new ArrayList<String>();
+                        while (mailEnum.hasMore()) {
+                            //sb.append("\t\t" + ea.next() + "\n");
+                            //System.out.println("\t\tmail: " + mailEnum.next());
+                            emails.add((String) mailEnum.next());
+                        }
+                        person.setEmails(emails);
                     }
-                    person.setEmails(emails);
                 }
                 resultList.add(person);
             }
@@ -102,6 +157,12 @@ public class LDAPUtils {
             // TODO - fix error message
             throw new Error("TODO: fix");
         }
+    }
+
+    public static NamingEnumeration<SearchResult> searchPerson(String searchString) throws NamingException {
+        String searchBase = "cn=person,dc=umu,dc=se";
+        String escapedSearchString = escapeLDAPSearchFilter(searchString);
+        return createLdapContext().search(searchBase, "(cn=*" + escapedSearchString + "*)", null);
     }
 
     public static String toString(final NamingEnumeration<SearchResult> resultEnum) {
@@ -133,4 +194,39 @@ public class LDAPUtils {
             return e.getMessage();
         }
     }
+
+    /**
+     * Escape special characters in search filter.
+     * From http://www.owasp.org/index.php/Preventing_LDAP_Injection_in_Java
+     * 
+     * @param The string to escape
+     * @return The escaped string
+     */
+    private static final String escapeLDAPSearchFilter(String filter) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < filter.length(); i++) {
+            char curChar = filter.charAt(i);
+            switch (curChar) {
+            case '\\':
+                sb.append("\\5c");
+                break;
+            case '*':
+                sb.append("\\2a");
+                break;
+            case '(':
+                sb.append("\\28");
+                break;
+            case ')':
+                sb.append("\\29");
+                break;
+            case '\u0000': 
+                sb.append("\\00"); 
+                break;
+            default:
+                sb.append(curChar);
+            }
+        }
+        return sb.toString();
+    }
+
 }

@@ -14,27 +14,39 @@
       <url-pattern>/*</url-pattern>
    </servlet-mapping>
 
-   <!-- CAS filter -->
-   <filter>
-      <filter-name>CAS Authentication Filter</filter-name>
-      <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
-      <init-param>
-         <param-name>casServerLoginUrl</param-name>
-         <param-value>https://cas.umu.se/login</param-value>
-      </init-param>
-      <init-param>
-         <param-name>service</param-name>
-         <param-value>http://localhost:8080/UmuMeREST/users/aonjon04</param-value>
-      </init-param>
-      <init-param>
-         <param-name>serverName</param-name>
-         <param-value>https://localhost:8080</param-value>
-      </init-param>
-   </filter>
+   <!-- SSL -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>UmumeREST</web-resource-name>
+         <url-pattern>/users/*</url-pattern>
+         <http-method>PUT</http-method>
+      </web-resource-collection>
+      <user-data-constraint>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
 
-<!--    <filter-mapping> -->
-<!--       <filter-name>CAS Authentication Filter</filter-name> -->
-<!--       <url-pattern>/users/*</url-pattern> -->
-<!-- <http-method>PUT</http-method> -->
-<!--    </filter-mapping> -->
+   <!-- CAS filter -->
+   <!--    <filter> -->
+   <!--       <filter-name>CAS Authentication Filter</filter-name> -->
+   <!--       <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class> -->
+   <!--       <init-param> -->
+   <!--          <param-name>casServerLoginUrl</param-name> -->
+   <!--          <param-value>https://cas.umu.se/login</param-value> -->
+   <!--       </init-param> -->
+   <!--       <init-param> -->
+   <!--          <param-name>service</param-name> -->
+   <!--          <param-value>http://localhost:8080/UmuMeREST/users/aonjon04</param-value> -->
+   <!--       </init-param> -->
+   <!--       <init-param> -->
+   <!--          <param-name>serverName</param-name> -->
+   <!--          <param-value>https://localhost:8080</param-value> -->
+   <!--       </init-param> -->
+   <!--    </filter> -->
+
+   <!--    <filter-mapping> -->
+   <!--       <filter-name>CAS Authentication Filter</filter-name> -->
+   <!--       <url-pattern>/users/*</url-pattern> -->
+   <!-- <http-method>PUT</http-method> -->
+   <!--    </filter-mapping> -->
 </web-app>

@@ -16,6 +16,7 @@ public class PersonBean {
     private URI resourceRef;
     private String givenName;
     private String familyName;
+    private URI photoURI;
     private List<String> emails;
     private List<String> tweets;
     private String twitterName;
@@ -23,6 +24,7 @@ public class PersonBean {
     private String street;
     private String postalCode;
     private String institution;
+    private String buildingName;
     private String roomNumber;
     private String phoneNumber;
     private String description;
@@ -199,5 +201,17 @@ public class PersonBean {
     }
     public String getDescription() {
         return description;
+    }
+    public String getBuildingName() {
+        return buildingName;
+    }
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
+    public URI getPhotoURI() {
+        return photoURI;
+    }
+    public void setPhotoURI(URI photoURI) {
+        this.photoURI = photoURI;
     }
 }
