@@ -17,7 +17,7 @@ public class LDAPUtilsTest {
     @Test
     public void testUidQuery() {
         try {
-            NamingEnumeration<SearchResult> result = LDAPUtils.searchForUid("hagu0002");
+            NamingEnumeration<SearchResult> result = LDAPUtils.searchForUid("joel0001");
             System.out.println(LDAPUtils.toString(result));
             //assertEquals("aonjon04", result.next().getAttributes().get("uid"));
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class LDAPUtilsTest {
     //@Test
     public void testPersonBeaner() {
         try {
-            NamingEnumeration<SearchResult> result = LDAPUtils.searchForUid("aonjon04");
+            NamingEnumeration<SearchResult> result = LDAPUtils.searchForUid("joel0001");
             List<PersonBean> personList = LDAPUtils.toPersonBeans(result);
 
             assertEquals(1, personList.size());

@@ -87,6 +87,13 @@ public class LDAPUtils {
             if (floorAttr != null) {
                 person.setFloor((String) floorAttr.get());
             }
+            
+            //physicalDeliveryOfficeName
+            Attribute physicalDeliveryOfficeAttr = attrs.get("physicalDeliveryOfficeName");
+            if (physicalDeliveryOfficeAttr != null) {
+                person.setPhysicalDeliveryOffice((String) physicalDeliveryOfficeAttr.get());
+            }
+            
             //private String street;
             Attribute streetAttr = attrs.get("street");
             if (streetAttr != null) {

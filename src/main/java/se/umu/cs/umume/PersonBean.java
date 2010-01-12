@@ -22,6 +22,7 @@ public class PersonBean {
     private List<String> tweets;
     private String twitterName;
     private String floor;
+    private String physicalDeliveryOffice;
     private String street;
     private String postalCode;
     private String institution;
@@ -220,5 +221,11 @@ public class PersonBean {
     }
     public void setUid(String uid) {
         this.uid = uid;
+    }
+    public String getPhysicalDeliveryOffice() {
+        return physicalDeliveryOffice;
+    }
+    public void setPhysicalDeliveryOffice(String physicalDeliveryOffice) {
+        this.physicalDeliveryOffice = physicalDeliveryOffice;
     }
 }
