@@ -61,105 +61,98 @@ public class LDAPUtils {
         return doLDAPSearch(searchBase, searchAttrs, matchingAttributes);
     }
 
-    public static List<PersonBean> toPersonBeans(final NamingEnumeration<SearchResult> resultEnum) {
-        try {
-            List<PersonBean> resultList = new ArrayList<PersonBean>();
-            // Print result
-            if (!resultEnum.hasMore()) {
-                return resultList;
-            }
-
-            while (resultEnum.hasMore()) {
-                Attributes attrs = resultEnum.next().getAttributes();
-                PersonBean person = new PersonBean();
-
-                // Get name
-                String givenName = (String) attrs.get("givenName").get();
-                // TODO: verify "sn"
-                String familyName = (String) attrs.get("sn").get();
-                person.setGivenName(givenName);
-                person.setFamilyName(familyName);
-
-                //private String floor;
-                Attribute floorAttr = attrs.get("floor");
-                if (floorAttr != null) {
-                    person.setFloor((String) floorAttr.get());
-                }
-                //private String street;
-                Attribute streetAttr = attrs.get("street");
-                if (streetAttr != null) {
-                    person.setStreet((String) streetAttr.get());
-                }
-                //private String postalCode;
-                Attribute postalCodeAttr = attrs.get("postalCode");
-                if (postalCodeAttr != null) {
-                    person.setPostalCode((String) postalCodeAttr.get());
-                }
-                //private String institution;
-                Attribute institutionAttr = attrs.get("institution");
-                if (institutionAttr != null) {
-                    person.setInstitution((String) institutionAttr.get());
-                }
-
-                //private String buildingName;
-                Attribute buildingNameAttr = attrs.get("buildingName");
-                if (buildingNameAttr != null) {
-                    person.setBuildingName((String) buildingNameAttr.get());
-                }
-
-                //private String roomNumber;
-                Attribute roomNumberAttr = attrs.get("roomNumber");
-                if (roomNumberAttr != null) {
-                    person.setRoomNumber((String) roomNumberAttr.get());
-                }
-                //private String phoneNumber;
-                Attribute phoneNumberAttr = attrs.get("telephoneNumber");
-                if (phoneNumberAttr != null) {
-                    person.setPhoneNumber((String) phoneNumberAttr.get());
-                }
-                //private String photoURI;
-                Attribute photoURIAttr = attrs.get("labeledURI");
-                if (photoURIAttr != null) {
-                    NamingEnumeration<?> uriEnum = photoURIAttr.getAll();
-                    while (uriEnum.hasMore()) {
-                        String content = (String) uriEnum.next();
-                        content = content.trim();
-                        int i = content.indexOf(" ");
-                        if (i > 0) {
-                            content = content.substring(0, i);
-                            try {
-                                person.setPhotoURI(new URI(content));
-                            } catch (URISyntaxException e) {
-                                logger.warn("photoURI not URI: {}", content);
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // Get all mails
-                Attribute mailAttr = attrs.get("mail");
-                if (mailAttr != null) {
-                    NamingEnumeration<?> mailEnum = mailAttr.getAll();
-                    if (mailEnum.hasMore()) {
-                        List<String> emails = new ArrayList<String>();
-                        while (mailEnum.hasMore()) {
-                            //sb.append("\t\t" + ea.next() + "\n");
-                            //System.out.println("\t\tmail: " + mailEnum.next());
-                            emails.add((String) mailEnum.next());
-                        }
-                        person.setEmails(emails);
-                    }
-                }
-                resultList.add(person);
-            }
+    public static List<PersonBean> toPersonBeans(final NamingEnumeration<SearchResult> resultEnum) throws NamingException {
+        List<PersonBean> resultList = new ArrayList<PersonBean>();
+        // Print result
+        if (!resultEnum.hasMore()) {
             return resultList;
-        } catch (NamingException e) {
-            // TODO - fix error message
-            logger.warn(e.getMessage());
-            e.printStackTrace();
-            throw new Error("TODO: fix", e);
         }
+
+        while (resultEnum.hasMore()) {
+            Attributes attrs = resultEnum.next().getAttributes();
+            PersonBean person = new PersonBean();
+
+            // Get name
+            String givenName = (String) attrs.get("givenName").get();
+            // TODO: verify "sn"
+            String familyName = (String) attrs.get("sn").get();
+            person.setGivenName(givenName);
+            person.setFamilyName(familyName);
+
+            //private String floor;
+            Attribute floorAttr = attrs.get("floor");
+            if (floorAttr != null) {
+                person.setFloor((String) floorAttr.get());
+            }
+            //private String street;
+            Attribute streetAttr = attrs.get("street");
+            if (streetAttr != null) {
+                person.setStreet((String) streetAttr.get());
+            }
+            //private String postalCode;
+            Attribute postalCodeAttr = attrs.get("postalCode");
+            if (postalCodeAttr != null) {
+                person.setPostalCode((String) postalCodeAttr.get());
+            }
+            //private String institution;
+            Attribute institutionAttr = attrs.get("institution");
+            if (institutionAttr != null) {
+                person.setInstitution((String) institutionAttr.get());
+            }
+
+            //private String buildingName;
+            Attribute buildingNameAttr = attrs.get("buildingName");
+            if (buildingNameAttr != null) {
+                person.setBuildingName((String) buildingNameAttr.get());
+            }
+
+            //private String roomNumber;
+            Attribute roomNumberAttr = attrs.get("roomNumber");
+            if (roomNumberAttr != null) {
+                person.setRoomNumber((String) roomNumberAttr.get());
+            }
+            //private String phoneNumber;
+            Attribute phoneNumberAttr = attrs.get("telephoneNumber");
+            if (phoneNumberAttr != null) {
+                person.setPhoneNumber((String) phoneNumberAttr.get());
+            }
+            //private String photoURI;
+            Attribute photoURIAttr = attrs.get("labeledURI");
+            if (photoURIAttr != null) {
+                NamingEnumeration<?> uriEnum = photoURIAttr.getAll();
+                while (uriEnum.hasMore()) {
+                    String content = (String) uriEnum.next();
+                    content = content.trim();
+                    int i = content.indexOf(" ");
+                    if (i > 0) {
+                        content = content.substring(0, i);
+                        try {
+                            person.setPhotoURI(new URI(content));
+                        } catch (URISyntaxException e) {
+                            logger.warn("photoURI not URI: {}", content);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // Get all mails
+            Attribute mailAttr = attrs.get("mail");
+            if (mailAttr != null) {
+                NamingEnumeration<?> mailEnum = mailAttr.getAll();
+                if (mailEnum.hasMore()) {
+                    List<String> emails = new ArrayList<String>();
+                    while (mailEnum.hasMore()) {
+                        //sb.append("\t\t" + ea.next() + "\n");
+                        //System.out.println("\t\tmail: " + mailEnum.next());
+                        emails.add((String) mailEnum.next());
+                    }
+                    person.setEmails(emails);
+                }
+            }
+            resultList.add(person);
+        }
+        return resultList;
     }
 
     public static NamingEnumeration<SearchResult> searchPerson(String searchString) throws NamingException {
