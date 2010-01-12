@@ -11,6 +11,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 public class TwitterUtils {
+    /*sug*/
     public static List<PersonBean> getTweets(List<PersonBean> persons) {
         for (PersonBean person : persons) {
             String userName = person.getTwitterName();
