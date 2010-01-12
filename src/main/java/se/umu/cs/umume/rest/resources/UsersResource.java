@@ -56,11 +56,14 @@ public class UsersResource {
         try {
             URI uri =  uriInfo.getAbsolutePath();
             List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
-            PersistanceLayer.addDatabaseInfo(result);
-            TwitterUtils.getTweets(result);
             if (result.isEmpty()) {
                 throw new WebApplicationException(404);
             }
+            //PersistanceLayer.addDatabaseInfo(result);
+            result.get(0).setTwitterName("javve");
+            TwitterUtils.getTweets(result);
+
+            // Should only be one user here
             result.get(0).setResourceRef(uri);
             return result.get(0);
         } catch (NamingException e) {
@@ -72,6 +75,7 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateUser(PersonBean pb) {
         System.err.println("Name: " + pb.getGivenName());
+        System.err.println("TwitterName: " + pb.getTwitterName());
         Response r = Response.status(Status.OK).build();
         return r;
     }

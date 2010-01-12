@@ -25,7 +25,6 @@ public class PersonBean {
     private String institution;
     private String roomNumber;
     private String phoneNumber;
-    private String twitterName;
     private String description;
 
     @XmlAttribute(name="self")
