@@ -13,11 +13,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.util.LDAPUtils;
 
 @Path("/search/{searchString}")
 public class SearchResource {
+    private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
     @Context UriInfo uriInfo;
     @PathParam("searchString") String searchString;
 
@@ -26,13 +31,13 @@ public class SearchResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<PersonBean> getUserXML() {
         try {
-            System.err.println("String: " + searchString);
             if (searchString.length() < 3) {
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             }
             List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
             return result;
         } catch (NamingException e) {
+            logger.warn("Search Exception: {}", e);
             throw new WebApplicationException(e, 500);
         }
     }
