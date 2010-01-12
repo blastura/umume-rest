@@ -22,6 +22,8 @@ public class PersonBean {
     private String institution;
     private String roomNumber;
     private String phoneNumber;
+    private String twitterName;
+    private String description;
 
     @XmlAttribute(name="self")
     public URI getResourceRef() {
@@ -181,5 +183,17 @@ public class PersonBean {
     }
     public void setTweets(List<String> tweets) {
         this.tweets = tweets;
+    }
+    public void setTwitterName(String twitterName) {
+        this.twitterName = twitterName;
+    }
+    public String getTwitterName() {
+        return twitterName;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
     }
 }
