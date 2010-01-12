@@ -123,9 +123,10 @@ public class LDAPUtils {
                     NamingEnumeration<?> uriEnum = photoURIAttr.getAll();
                     while (uriEnum.hasMore()) {
                         String content = (String) uriEnum.next();
-                        int i = content.indexOf("(photo");
+                        content = content.trim();
+                        int i = content.indexOf(" ");
                         if (i > 0) {
-                            content = content.substring(0, i).trim();
+                            content = content.substring(0, i);
                             try {
                                 person.setPhotoURI(new URI(content));
                             } catch (URISyntaxException e) {
@@ -155,7 +156,9 @@ public class LDAPUtils {
             return resultList;
         } catch (NamingException e) {
             // TODO - fix error message
-            throw new Error("TODO: fix");
+            logger.warn(e.getMessage());
+            e.printStackTrace();
+            throw new Error("TODO: fix", e);
         }
     }
 
