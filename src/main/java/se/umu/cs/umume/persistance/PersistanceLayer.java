@@ -56,21 +56,19 @@ public class PersistanceLayer {
                     .executeQuery("select * from Persons where UserName = '"
                             + person.getUid() + "'");
             if (rs.next()) {
-                ResultSet rs2 = stat
-                        .executeQuery("UPDATE Persons SET TwitterName = '"
+                stat.executeUpdate("UPDATE Persons SET TwitterName = '"
                                 + person.getTwitterName()
                                 + "' AND Description = '"
                                 + person.getDescription()
                                 + "' WHERE UserName = '" + person.getUid() + "'");
-                rs2.close();
             } else {
-                ResultSet rs2 = stat
-                .executeQuery("INSERT INTO Persons " 
-                        + "(TwitterName, Description) VALUES ("
-                        + "'"+ person.getTwitterName() + "'"  
-                        + "'" + person.getDescription() + "')"
-                        + " WHERE UserName = '" + person.getUid() + "'");
-                rs2.close();
+                String sql = "INSERT INTO Persons " 
+                    + "(UserName, TwitterName, Description) VALUES ("
+                    + "'"+ person.getUid() + "',"  
+                    + "'"+ person.getTwitterName() + "',"  
+                    + "'" + person.getDescription() + "')";
+                logger.info("Doing sql: {}", sql);
+                stat.executeUpdate(sql);
             }
             rs.close();
             conn.close();
@@ -79,5 +77,6 @@ public class PersistanceLayer {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        // TODO: Close connection and resultset
     }
 }

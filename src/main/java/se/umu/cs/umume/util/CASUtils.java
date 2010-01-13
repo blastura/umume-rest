@@ -26,7 +26,7 @@ public class CASUtils {
         return false;
     }
 
-    public static final String validateTicket(String ticket) {
+    public static final String validateTicket(String ticket, String service) {
         AttributePrincipal principal = null;
         String casServerUrl = "https://cas.umu.se/";
         Cas20ProxyTicketValidator sv = new Cas20ProxyTicketValidator(casServerUrl);
@@ -35,8 +35,8 @@ public class CASUtils {
             // there is no need, that the legacy application is accessible
             // through this URL. But for validation purpose, even a non-web-app
             // needs a valid looking URL as identifier.
-            String legacyServerServiceUrl = "http://localhost:8080/UmuMeREST/users/aonjon04";
-            Assertion a = sv.validate(ticket, legacyServerServiceUrl);
+            //String legacyServerServiceUrl = "http://localhost:8080/UmuMeREST/users/aonjon04";
+            Assertion a = sv.validate(ticket, service);
             principal = a.getPrincipal();
             System.out.println("user name:" + principal.getName());
             return principal.getName();

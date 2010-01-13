@@ -58,19 +58,22 @@ public class UsersResource {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateUser(@PathParam("uid") String uid,
-            PersonBean pb, @QueryParam("ticket") String ticket) {
-        logger.info("Got PUT {} with ticket {}", pb.getTwitterName(), ticket);
-        String validUserName = CASUtils.validateTicket(ticket);
+            PersonBean pb,
+            @QueryParam("ticket") String ticket,
+            @QueryParam("service") String service) {
+        logger.info("Got PUT with ticket {} and service {}", ticket, service);
+        String validUserName = CASUtils.validateTicket(ticket, service);
         if (validUserName == null) {
-            logger.warn("Unauthorized attemt to update uid '{}'", uid);
+            logger.warn("Unauthorized attemt to update uid '{}' at service '{}'", uid, service);
             throw new WebApplicationException(Status.UNAUTHORIZED);
         };
         logger.info("UPDATE: Valid user: " + validUserName);
         logger.info("UPDATE: TwitterName: " + pb.getTwitterName());
-        logger.info("UPDATE: TwitterName: " + pb.getDescription());
+        logger.info("UPDATE: desc: " + pb.getDescription());
         logger.info("UPDATE: long: " + pb.getLonglitude());
         logger.info("UPDATE: lat: " + pb.getLatitude());
-        
+        pb.setUid(validUserName);
+        PersistanceLayer.updateInfo(pb);
         Response r = Response.status(Status.OK).build();
         return r;
     }
