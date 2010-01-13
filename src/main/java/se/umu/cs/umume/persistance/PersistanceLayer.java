@@ -58,7 +58,7 @@ public class PersistanceLayer {
             if (rs.next()) {
                 stat.executeUpdate("UPDATE Persons SET TwitterName = '"
                                 + person.getTwitterName()
-                                + "' AND Description = '"
+                                + "', Description = '"
                                 + person.getDescription()
                                 + "' WHERE UserName = '" + person.getUid() + "'");
             } else {
