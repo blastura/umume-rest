@@ -8,31 +8,20 @@
    <dependencies>
       <!-- Testing -->
       <dependency org="junit" name="junit" rev="4.4" conf="test->default"/>
-      <dependency org="com.sun.jersey.test.framework"
-                  name="jersey-test-framework"
-                  rev="1.0.3"
-                  conf="test->default" />
+      <dependency org="com.sun.jersey.test.framework" name="jersey-test-framework" rev="1.0.3" conf="test->default" />
 
       <!-- server -->
-      <dependency org="com.sun.grizzly"
-                  name="grizzly-servlet-webserver"
-                  rev="1.9.9"
-                  conf="test->default"/>
+      <dependency org="com.sun.grizzly" name="grizzly-servlet-webserver" rev="1.9.9" conf="test->default"/>
       
       <!-- Twitter -->
-      <dependency org="net.homeip.yusuke"
-                  name="twitter4j"
-                  rev="2.0.10" />
+      <dependency org="net.homeip.yusuke" name="twitter4j" rev="2.0.10" />
       
       <!-- CAS Jasig -->
-      <dependency org="org.jasig.cas"
-                  name="cas-client-core"
-                  rev="3.1.2" />
-      
-      <dependency org="com.sun.jersey" name="jersey-server" rev="1.0.3" />
+      <dependency org="org.jasig.cas" name="cas-client-core" rev="3.1.2" />
+      <dependency org="com.sun.jersey" name="jersey-server" rev="1.1.4" />
       
       <!-- bindings -->
-      <dependency org="com.sun.jersey" name="jersey-json" rev="1.0.3" />
+      <dependency org="com.sun.jersey" name="jersey-json" rev="1.1.4" />
       <dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" />
 
       <!-- Logging -->
