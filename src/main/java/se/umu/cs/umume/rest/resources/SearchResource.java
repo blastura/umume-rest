@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +42,9 @@ public class SearchResource {
             }
             return result;
         } catch (NamingException e) {
-            logger.warn("Search Exception: {}", e);
-            throw new WebApplicationException(e, 500);
+            logger.warn("Search Exception: {} for search", e.getMessage(), searchString);
+            Response r = Response.status(Status.BAD_REQUEST).entity(e.getMessage()).type("text/plain").build();
+            throw new WebApplicationException(r);
         }
     }
 }
