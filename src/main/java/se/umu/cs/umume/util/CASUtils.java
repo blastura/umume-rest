@@ -6,8 +6,12 @@ import org.jasig.cas.client.validation.Cas20ProxyTicketValidator;
 import org.jasig.cas.client.validation.Saml11TicketValidator;
 import org.jasig.cas.client.validation.TicketValidationException;
 
-public class CASUtils {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class CASUtils {
+    private static Logger logger = LoggerFactory.getLogger(CASUtils.class);
+    
     public static final boolean validateTicketSAML(String ticket) {
         Saml11TicketValidator sv = new Saml11TicketValidator("https://cas.umu.se/");
         String legacyServerServiceUrl = "http://localhost:8080/UmuMeREST/users/aonjon04";
@@ -37,7 +41,7 @@ public class CASUtils {
             System.out.println("user name:" + principal.getName());
             return principal.getName();
         } catch (TicketValidationException e) {
-            e.printStackTrace(); // bad style, but only for demonstration purpose.
+            logger.info("Not valid ticket: {}", e.getMessage());
         }
         return null;
     }
