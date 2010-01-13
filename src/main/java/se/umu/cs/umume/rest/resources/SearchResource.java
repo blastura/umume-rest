@@ -42,7 +42,7 @@ public class SearchResource {
             }
             return result;
         } catch (NamingException e) {
-            logger.warn("Search Exception: {} for search", e.getMessage(), searchString);
+            logger.warn("Search Exception: {} for search '{}'", e.getMessage(), searchString);
             Response r = Response.status(Status.BAD_REQUEST).entity(e.getMessage()).type("text/plain").build();
             throw new WebApplicationException(r);
         }
