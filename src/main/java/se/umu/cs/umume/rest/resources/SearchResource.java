@@ -11,8 +11,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ import se.umu.cs.umume.util.LDAPUtils;
 @Path("/search/{searchString}")
 public class SearchResource {
     private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
-    @Context UriInfo uriInfo;
-    @PathParam("searchString") String searchString;
+    private static @Context UriInfo uriInfo;
+    private static @PathParam("searchString") String searchString;
 
     // The Java method will process HTTP GET requests
     @GET
@@ -35,6 +35,9 @@ public class SearchResource {
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             }
             List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
+            for (PersonBean pb : result) {
+                pb.setResourceRef(UriBuilder.fromUri(uriInfo.getBaseUri()).path(UsersResource.class).build(pb.getUid()));
+            }
             return result;
         } catch (NamingException e) {
             logger.warn("Search Exception: {}", e);

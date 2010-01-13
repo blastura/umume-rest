@@ -30,8 +30,10 @@ public class PersonBean {
     private String roomNumber;
     private String phoneNumber;
     private String description;
+    private double latitude;
+    private double longlitude;
 
-    @XmlAttribute(name="self")
+    @XmlAttribute(name="ref")
     public URI getResourceRef() {
         return resourceRef;
     }
@@ -227,5 +229,17 @@ public class PersonBean {
     }
     public void setPhysicalDeliveryOffice(String physicalDeliveryOffice) {
         this.physicalDeliveryOffice = physicalDeliveryOffice;
+    }
+    public double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+    public double getLonglitude() {
+        return longlitude;
+    }
+    public void setLonglitude(double longlitude) {
+        this.longlitude = longlitude;
     }
 }
