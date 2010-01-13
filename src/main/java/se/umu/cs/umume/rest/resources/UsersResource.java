@@ -70,7 +70,7 @@ public class UsersResource {
         logger.info("UPDATE: Valid user: " + validUserName);
         logger.info("UPDATE: TwitterName: " + pb.getTwitterName());
         logger.info("UPDATE: desc: " + pb.getDescription());
-        logger.info("UPDATE: long: " + pb.getLonglitude());
+        logger.info("UPDATE: long: " + pb.getLongitude());
         logger.info("UPDATE: lat: " + pb.getLatitude());
         pb.setUid(validUserName);
         PersistanceLayer.updateInfo(pb);

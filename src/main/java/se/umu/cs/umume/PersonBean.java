@@ -31,7 +31,7 @@ public class PersonBean {
     private String phoneNumber;
     private String description;
     private double latitude;
-    private double longlitude;
+    private double longitude;
 
     @XmlAttribute(name="ref")
     public URI getResourceRef() {
@@ -236,10 +236,10 @@ public class PersonBean {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
-    public double getLonglitude() {
-        return longlitude;
+    public double getLongitude() {
+        return longitude;
     }
-    public void setLonglitude(double longlitude) {
-        this.longlitude = longlitude;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
