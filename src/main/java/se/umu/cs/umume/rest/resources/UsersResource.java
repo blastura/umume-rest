@@ -17,6 +17,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.persistance.PersistanceLayer;
 import se.umu.cs.umume.util.LDAPUtils;
@@ -24,8 +27,9 @@ import se.umu.cs.umume.util.TwitterUtils;
 
 @Path("/users/{uid}")
 public class UsersResource {
-    @Context UriInfo uriInfo;
-    @PathParam("uid") String uid;
+    private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
+    private @Context UriInfo uriInfo;
+    private @PathParam("uid") String uid;
     
     // The Java method will process HTTP GET requests
     @GET
@@ -52,6 +56,7 @@ public class UsersResource {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateUser(PersonBean pb) {
+        logger.info("Got PUT {}", pb.getTwitterName());
         System.err.println("Name: " + pb.getGivenName());
         System.err.println("TwitterName: " + pb.getTwitterName());
         Response r = Response.status(Status.OK).build();
