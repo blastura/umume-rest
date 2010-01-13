@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import se.umu.cs.umume.PersonBean;
 import se.umu.cs.umume.persistance.PersistanceLayer;
+import se.umu.cs.umume.util.CASUtils;
 import se.umu.cs.umume.util.LDAPUtils;
 import se.umu.cs.umume.util.TwitterUtils;
 
@@ -29,12 +31,11 @@ import se.umu.cs.umume.util.TwitterUtils;
 public class UsersResource {
     private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
     private @Context UriInfo uriInfo;
-    private @PathParam("uid") String uid;
     
     // The Java method will process HTTP GET requests
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public PersonBean getUserXML() {
+    public PersonBean getUserXML(@PathParam("uid") String uid) {
         try {
             URI uri =  uriInfo.getAbsolutePath();
             List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
@@ -55,10 +56,20 @@ public class UsersResource {
     
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    public Response updateUser(PersonBean pb) {
-        logger.info("Got PUT {}", pb.getTwitterName());
-        System.err.println("Name: " + pb.getGivenName());
-        System.err.println("TwitterName: " + pb.getTwitterName());
+    public Response updateUser(@PathParam("uid") String uid,
+            PersonBean pb, @QueryParam("ticket") String ticket) {
+        logger.info("Got PUT {} with ticket {}", pb.getTwitterName(), ticket);
+        String validUserName = CASUtils.validateTicket(ticket);
+        if (validUserName == null) {
+            logger.warn("Unauthorized attemt to update uid '{}'", uid);
+            throw new WebApplicationException(Status.UNAUTHORIZED);
+        };
+        logger.info("UPDATE: Valid user: " + validUserName);
+        logger.info("UPDATE: TwitterName: " + pb.getTwitterName());
+        logger.info("UPDATE: TwitterName: " + pb.getDescription());
+        logger.info("UPDATE: long: " + pb.getLonglitude());
+        logger.info("UPDATE: lat: " + pb.getLatitude());
+        
         Response r = Response.status(Status.OK).build();
         return r;
     }

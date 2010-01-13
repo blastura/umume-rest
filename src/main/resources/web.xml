@@ -14,17 +14,17 @@
       <url-pattern>/*</url-pattern>
    </servlet-mapping>
 
-<!--    <security-constraint> -->
-<!--       <web-resource-collection> -->
-<!--          <web-resource-name>UmumeREST</web-resource-name> -->
-<!--          <url-pattern>/users/*</url-pattern> -->
-<!--          <http-method>PUT</http-method> -->
-<!--       </web-resource-collection> -->
-<!--       <user-data-constraint> -->
-<!--          <transport-guarantee>CONFIDENTIAL</transport-guarantee> -->
-<!--       </user-data-constraint> -->
-<!--    </security-constraint> -->
-
+   <!--    <security-constraint> -->
+   <!--       <web-resource-collection> -->
+   <!--          <web-resource-name>UmumeREST</web-resource-name> -->
+   <!--          <url-pattern>/users/*</url-pattern> -->
+   <!--          <http-method>PUT</http-method> -->
+   <!--       </web-resource-collection> -->
+   <!--       <user-data-constraint> -->
+   <!--          <transport-guarantee>CONFIDENTIAL</transport-guarantee> -->
+   <!--       </user-data-constraint> -->
+   <!--    </security-constraint> -->
+   
    <!-- CAS filter -->
    <!--    <filter> -->
    <!--       <filter-name>CAS Authentication Filter</filter-name> -->

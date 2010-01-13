@@ -22,9 +22,7 @@ public class CASUtils {
         return false;
     }
 
-
-
-    public static final boolean validateTicket(String ticket) {
+    public static final String validateTicket(String ticket) {
         AttributePrincipal principal = null;
         String casServerUrl = "https://cas.umu.se/";
         Cas20ProxyTicketValidator sv = new Cas20ProxyTicketValidator(casServerUrl);
@@ -37,9 +35,10 @@ public class CASUtils {
             Assertion a = sv.validate(ticket, legacyServerServiceUrl);
             principal = a.getPrincipal();
             System.out.println("user name:" + principal.getName());
+            return principal.getName();
         } catch (TicketValidationException e) {
             e.printStackTrace(); // bad style, but only for demonstration purpose.
         }
-        return principal != null;
+        return null;
     }
 }
