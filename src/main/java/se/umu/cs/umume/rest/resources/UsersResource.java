@@ -42,8 +42,9 @@ public class UsersResource {
             if (result.isEmpty()) {
                 throw new WebApplicationException(404);
             }
-            //PersistanceLayer.addDatabaseInfo(result);
-            result.get(0).setTwitterName("javve");
+            PersistanceLayer.addDatabaseInfo(result);
+            //PersistanceLayer.testURI();
+            //result.get(0).setTwitterName("javve");
             TwitterUtils.getTweets(result);
 
             // Should only be one user here

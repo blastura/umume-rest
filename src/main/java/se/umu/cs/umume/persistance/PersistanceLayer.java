@@ -6,15 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.umu.cs.umume.PersonBean;
 
 public class PersistanceLayer {
 
-    private static Logger logger = Logger.getLogger("persistanceLayerLogger");
-    private static String databasePath = "jdbc:sqlite://Users/Jonny/Universitet/SOA/apache-tomcat-6.0.20/webapps/UmuMeREST/WEB-INF/classes/thebrain.rsd";
-
+    private static Logger logger = LoggerFactory.getLogger(PersistanceLayer.class);
+    private static String databasePath = "jdbc:sqlite:/" + PersistanceLayer.class.getResource("/thebrain.rsd").getFile();
+    
+//    public static void testURI() {
+//        logger.info("DB: " + databasePath);
+//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd"));
+//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getPath());
+//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getFile());
+//    }
+    
     public static void addDatabaseInfo(List<PersonBean> persons) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -22,8 +31,8 @@ public class PersistanceLayer {
             Statement stat = conn.createStatement();
             for (PersonBean person : persons) {
                 ResultSet rs = stat
-                        .executeQuery("select * from Persons where UserName = \""
-                                + person.getUid() + "\"");
+                .executeQuery("select * from Persons where UserName = \""
+                        + person.getUid() + "\"");
                 while (rs.next()) {
                     person.setDescription(rs.getString("Description"));
                     person.setTwitterName(rs.getString("TwitterName"));
