@@ -40,6 +40,7 @@ public class PersistanceLayer {
                     person.setTwitterName(rs.getString("TwitterName"));
                     person.setLongitude(rs.getDouble("Longitude"));
                     person.setLatitude(rs.getDouble("Latitude"));
+                    logger.info("From db (desc) {}: ", person.getDescription());
                 }
                 rs.close();
             }
@@ -71,6 +72,7 @@ public class PersistanceLayer {
                     + "Description = '"
                     + person.getDescription() + "'"
                     + " WHERE UserName = '" + person.getUid() + "'";
+                logger.info("Running query: {}", sql);
                 conn.createStatement().executeUpdate(sql);
                 /*
                 String sql = "UPDATE Persons SET "
