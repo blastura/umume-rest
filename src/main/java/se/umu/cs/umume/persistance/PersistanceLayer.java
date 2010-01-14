@@ -101,8 +101,10 @@ public class PersistanceLayer {
                     + "'" + person.getDescription() + "')";
                 */
                 String sql = "INSERT INTO Persons " 
-                    + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES ("
+                    + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES "
                     + "(?,?,?,?,?)";
+                logger.info("Running query: {}", sql);
+
                 
                 PreparedStatement prepStmt = conn.prepareStatement(sql);
                 prepStmt.setString(1, person.getTwitterName());
@@ -110,7 +112,6 @@ public class PersistanceLayer {
                 prepStmt.setDouble(3, person.getLatitude());
                 prepStmt.setString(4, person.getDescription());
 
-                logger.info("Running query: {}", sql);
                 
                 prepStmt.executeUpdate();
                 
