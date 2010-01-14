@@ -104,18 +104,16 @@ public class PersistanceLayer {
                     + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES "
                     + "(?,?,?,?,?)";
                 logger.info("Running query: {}", sql);
-
                 
                 PreparedStatement prepStmt = conn.prepareStatement(sql);
-                prepStmt.setString(1, person.getTwitterName());
-                prepStmt.setDouble(2, person.getLongitude());
-                prepStmt.setDouble(3, person.getLatitude());
-                prepStmt.setString(4, person.getDescription());
+                prepStmt.setString(1, person.getUid());
+                prepStmt.setString(2, person.getTwitterName());
+                prepStmt.setDouble(3, person.getLongitude());
+                prepStmt.setDouble(4, person.getLatitude());
+                prepStmt.setString(5, person.getDescription());
 
                 
                 prepStmt.executeUpdate();
-                
-                logger.info("Doing sql: {}", sql);
                 //stat.executeUpdate(sql);
             }
             rs.close();
