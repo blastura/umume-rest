@@ -60,7 +60,7 @@ public class PersistanceLayer {
             .executeQuery("select * from Persons where UserName = '"
                     + person.getUid() + "'");
             if (rs.next()) {
-                /*
+                
                 String sql = "UPDATE Persons SET "
                     + "TwitterName = '"
                     + person.getTwitterName() + "', "
@@ -71,8 +71,8 @@ public class PersistanceLayer {
                     + "Description = '"
                     + person.getDescription() + "'"
                     + " WHERE UserName = '" + person.getUid() + "'";
-                */
-
+                conn.createStatement().executeUpdate(sql);
+                /*
                 String sql = "UPDATE Persons SET "
                     + "TwitterName = ?, "
                     + "Longitude = ?, "
@@ -89,7 +89,9 @@ public class PersistanceLayer {
                 logger.info("Running query: {}", sql);
                 
                 prepStmt.executeUpdate();
+                */
             } else {
+                /*
                 String sql = "INSERT INTO Persons " 
                     + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES ("
                     + "'"+ person.getUid() + "',"  
@@ -97,8 +99,23 @@ public class PersistanceLayer {
                     + "'"+ person.getLongitude() + "'," 
                     + "'"+ person.getLatitude() + "'," 
                     + "'" + person.getDescription() + "')";
+                */
+                String sql = "INSERT INTO Persons " 
+                    + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES ("
+                    + "(?,?,?,?,?)";
+                
+                PreparedStatement prepStmt = conn.prepareStatement(sql);
+                prepStmt.setString(1, person.getTwitterName());
+                prepStmt.setLong(2, (long) person.getLongitude());
+                prepStmt.setLong(3, (long) person.getLatitude());
+                prepStmt.setString(4, person.getDescription());
+
+                logger.info("Running query: {}", sql);
+                
+                prepStmt.executeUpdate();
+                
                 logger.info("Doing sql: {}", sql);
-                stat.executeUpdate(sql);
+                //stat.executeUpdate(sql);
             }
             rs.close();
             conn.close();
