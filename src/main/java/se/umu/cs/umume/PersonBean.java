@@ -25,6 +25,7 @@ public class PersonBean {
     private String physicalDeliveryOffice;
     private String street;
     private String postalCode;
+    private String postalAddress;
     private String institution;
     private String buildingName;
     private String roomNumber;
@@ -241,5 +242,11 @@ public class PersonBean {
     }
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+    public void setPostalAddress(String postalAddress) {
+        this.postalAddress = postalAddress;
+    }
+    public String getPostalAddress() {
+        return postalAddress;
     }
 }

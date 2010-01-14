@@ -104,6 +104,13 @@ public class LDAPUtils {
             if (postalCodeAttr != null) {
                 person.setPostalCode((String) postalCodeAttr.get());
             }
+            
+            //private String postalAddress;
+            Attribute postalAddressAttr = attrs.get("postalAddress");
+            if (postalAddressAttr != null) {
+                person.setPostalAddress((String) postalAddressAttr.get());
+            }
+            
             //private String institution;
             Attribute institutionAttr = attrs.get("institution");
             if (institutionAttr != null) {
