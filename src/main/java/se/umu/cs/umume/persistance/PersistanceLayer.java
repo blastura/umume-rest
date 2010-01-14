@@ -106,8 +106,8 @@ public class PersistanceLayer {
                 
                 PreparedStatement prepStmt = conn.prepareStatement(sql);
                 prepStmt.setString(1, person.getTwitterName());
-                prepStmt.setLong(2, (long) person.getLongitude());
-                prepStmt.setLong(3, (long) person.getLatitude());
+                prepStmt.setDouble(2, person.getLongitude());
+                prepStmt.setDouble(3, person.getLatitude());
                 prepStmt.setString(4, person.getDescription());
 
                 logger.info("Running query: {}", sql);
