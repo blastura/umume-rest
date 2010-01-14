@@ -63,7 +63,7 @@ public class UsersResource {
             @QueryParam("service") String service) {
         logger.info("Got PUT with ticket {} and service {}", ticket, service);
         String validUserName = CASUtils.validateTicket(ticket, service);
-        if (validUserName == null) {
+        if (validUserName == null || !uid.equals(validUserName)) {
             logger.warn("Unauthorized attemt to update uid '{}' at service '{}'", uid, service);
             throw new WebApplicationException(Status.UNAUTHORIZED);
         };
