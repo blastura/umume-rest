@@ -2,6 +2,7 @@ package se.umu.cs.umume.persistance;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +30,7 @@ public class PersistanceLayer {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(databasePath);
             Statement stat = conn.createStatement();
+            
             for (PersonBean person : persons) {
                 ResultSet rs = stat
                 .executeQuery("select * from Persons where UserName = \""
@@ -58,6 +60,7 @@ public class PersistanceLayer {
             .executeQuery("select * from Persons where UserName = '"
                     + person.getUid() + "'");
             if (rs.next()) {
+                /*
                 String sql = "UPDATE Persons SET "
                     + "TwitterName = '"
                     + person.getTwitterName() + "', "
@@ -68,8 +71,24 @@ public class PersistanceLayer {
                     + "Description = '"
                     + person.getDescription() + "'"
                     + " WHERE UserName = '" + person.getUid() + "'";
+                */
+
+                String sql = "UPDATE Persons SET "
+                    + "TwitterName = ?, "
+                    + "Longitude = ?, "
+                    + "Latitude = ?,"
+                    + "Description = ?"
+                    + " WHERE UserName = '" + person.getUid() + "'";
+                
+                PreparedStatement prepStmt = conn.prepareStatement(sql);
+                prepStmt.setString(1, person.getTwitterName());
+                prepStmt.setLong(2, (long) person.getLongitude());
+                prepStmt.setLong(3, (long) person.getLatitude());
+                prepStmt.setString(4, person.getDescription());
+
                 logger.info("Running query: {}", sql);
-                stat.executeUpdate(sql);
+                
+                prepStmt.executeUpdate();
             } else {
                 String sql = "INSERT INTO Persons " 
                     + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES ("
