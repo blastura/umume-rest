@@ -49,6 +49,8 @@ public class UsersResource {
 
             // Should only be one user here
             result.get(0).setResourceRef(uri);
+            logger.info("GET: street:" + result.get(0).getStreet());
+            logger.info("GET: desc:" + result.get(0).getDescription());
             return result.get(0);
         } catch (NamingException e) {
             throw new WebApplicationException(e, 500);
