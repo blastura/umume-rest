@@ -16,14 +16,14 @@ public class PersistanceLayer {
 
     private static Logger logger = LoggerFactory.getLogger(PersistanceLayer.class);
     private static String databasePath = "jdbc:sqlite:/" + PersistanceLayer.class.getResource("/thebrain.rsd").getFile();
-    
-//    public static void testURI() {
-//        logger.info("DB: " + databasePath);
-//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd"));
-//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getPath());
-//        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getFile());
-//    }
-    
+
+    //    public static void testURI() {
+    //        logger.info("DB: " + databasePath);
+    //        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd"));
+    //        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getPath());
+    //        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getFile());
+    //    }
+
     public static void addDatabaseInfo(List<PersonBean> persons) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -36,6 +36,8 @@ public class PersistanceLayer {
                 while (rs.next()) {
                     person.setDescription(rs.getString("Description"));
                     person.setTwitterName(rs.getString("TwitterName"));
+                    person.setLongitude(rs.getDouble("Longitude"));
+                    person.setLatitude(rs.getDouble("Latitude"));
                 }
                 rs.close();
             }
@@ -53,19 +55,28 @@ public class PersistanceLayer {
             Connection conn = DriverManager.getConnection(databasePath);
             Statement stat = conn.createStatement();
             ResultSet rs = stat
-                    .executeQuery("select * from Persons where UserName = '"
-                            + person.getUid() + "'");
+            .executeQuery("select * from Persons where UserName = '"
+                    + person.getUid() + "'");
             if (rs.next()) {
-                stat.executeUpdate("UPDATE Persons SET TwitterName = '"
-                                + person.getTwitterName()
-                                + "', Description = '"
-                                + person.getDescription()
-                                + "' WHERE UserName = '" + person.getUid() + "'");
+                String sql = "UPDATE Persons SET "
+                    + "TwitterName = '"
+                    + person.getTwitterName() + "', "
+                    + "Longitude = "
+                    + person.getLongitude() + ", "
+                    + "Latitude = "
+                    + person.getLatitude() + ", "
+                    + "Description = '"
+                    + person.getDescription() + "'"
+                    + " WHERE UserName = '" + person.getUid() + "'";
+                logger.info("Running query: {}", sql);
+                stat.executeUpdate(sql);
             } else {
                 String sql = "INSERT INTO Persons " 
-                    + "(UserName, TwitterName, Description) VALUES ("
+                    + "(UserName, TwitterName, Longitude, Latitude, Description) VALUES ("
                     + "'"+ person.getUid() + "',"  
-                    + "'"+ person.getTwitterName() + "',"  
+                    + "'"+ person.getTwitterName() + "',"
+                    + "'"+ person.getLongitude() + "'," 
+                    + "'"+ person.getLatitude() + "'," 
                     + "'" + person.getDescription() + "')";
                 logger.info("Doing sql: {}", sql);
                 stat.executeUpdate(sql);
