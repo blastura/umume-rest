@@ -2,8 +2,9 @@
 <project name="Umume-REST" default="compile" basedir="."
          xmlns:ivy="antlib:org.apache.ivy.ant">
 
-   <property file="conf/build.properties" />
-
+  <property environment="env"/>
+  <property file="conf/build.properties" />
+  
    <!-- Dir Properties -->
    <property name="build.dir" location="target"/>
    <property name="build.main.dir" location="${build.dir}/classes"/>
