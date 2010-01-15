@@ -19,6 +19,7 @@ import javax.naming.ldap.LdapContext;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.SearchControls;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +182,9 @@ public class LDAPUtils {
     public static NamingEnumeration<SearchResult> searchPerson(String searchString) throws NamingException {
         String searchBase = "cn=person,dc=umu,dc=se";
         String escapedSearchString = escapeLDAPSearchFilter(searchString);
-        return createLdapContext().search(searchBase, "(cn=*" + escapedSearchString + "*)", null);
+        SearchControls sc = new SearchControls();
+        sc.setReturningAttributes(new String[] {"givenName", "sn", "employeeType", "uid"});
+        return createLdapContext().search(searchBase, "(cn=*" + escapedSearchString + "*)", sc);
     }
 
     public static String toString(final NamingEnumeration<SearchResult> resultEnum) {
