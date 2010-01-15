@@ -85,7 +85,7 @@ public class LDAPUtils {
             //private String employeeType;
             Attribute employeeTypeAttr = attrs.get("employeeType");
             if (employeeTypeAttr != null) {
-                person.setEmployeeType(((String) employeeTypeAttr.get());
+                person.setEmployeeType((String) employeeTypeAttr.get());
             }
             
             //private String floor;
