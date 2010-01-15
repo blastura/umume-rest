@@ -17,6 +17,7 @@ public class PersonBean {
     private String uid;
     private String givenName;
     private String familyName;
+    private String employeeType;
     private URI photoURI;
     private List<String> emails;
     private List<String> tweets;
@@ -248,5 +249,11 @@ public class PersonBean {
     }
     public String getPostalAddress() {
         return postalAddress;
+    }
+    public void setEmployeeType(String employeeType) {
+        this.employeeType = employeeType;
+    }
+    public String getEmployeeType() {
+        return employeeType;
     }
 }

@@ -82,6 +82,12 @@ public class LDAPUtils {
             String uid = (String) attrs.get("uid").get();
             person.setUid(uid);
 
+            //private String employeeType;
+            Attribute employeeTypeAttr = attrs.get("employeeType");
+            if (employeeTypeAttr != null) {
+                person.setFloor((String) employeeTypeAttr.get());
+            }
+            
             //private String floor;
             Attribute floorAttr = attrs.get("floor");
             if (floorAttr != null) {
