@@ -22,7 +22,7 @@
       
       <!-- bindings -->
       <dependency org="com.sun.jersey" name="jersey-json" rev="1.1.4" />
-      <dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" />
+<!--       <dependency org="javax.xml.bind" name="jaxb-api" rev="2.1.12" /> -->
 
       <!-- Logging -->
       <dependency org="log4j" name="log4j" rev="1.2.12"/>
