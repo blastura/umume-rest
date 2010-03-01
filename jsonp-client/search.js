@@ -1,6 +1,6 @@
 jQuery.fn.liveUpdate = function(table) {
-    // Variation of http://ejohn.org/blog/jquery-livesearch/
-    table = jQuery(table);
+  // Variation of http://ejohn.org/blog/jquery-livesearch/
+  table = jQuery(table);
 
   if ( table.length ) {
     var rows = table.children().children('tr'),
@@ -12,6 +12,7 @@ jQuery.fn.liveUpdate = function(table) {
                                 });
                        return string;
                      });
+
     this.keyup(filter).keyup();
     // .parents('form').submit(function(){ return false; });
   }
