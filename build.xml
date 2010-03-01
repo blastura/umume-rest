@@ -153,11 +153,16 @@
    <property name="ivy.install.version" value="2.1.0"/>
    <property name="ivy.jar.dir" value="${conf.dir}/ivy"/>
    <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
+   
+   <property name="ivy.dep.file" value="${basedir}/conf/ivy.xml" />
+   <property name="ivy.settings.file" value="${basedir}/conf/ivysettings.xml" />
 
+   
    <target name="resolve" description="Download project dependencies"
            xmlns:ivy="antlib:org.apache.ivy.ant"
            depends="prepare-ivy, install-ivy">
-      <ivy:settings file="ivysettings.xml" />
+      <ivy:settings file="${ivy.settings.file}" />
+      <ivy:info file="${ivy.dep.file}" />
       <ivy:retrieve pattern="lib/[conf]/[artifact]-[revision].[ext]" />
    </target>
 

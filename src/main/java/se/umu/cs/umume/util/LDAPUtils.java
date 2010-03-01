@@ -24,7 +24,7 @@ import javax.naming.directory.SearchControls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
 
 import java.util.ArrayList;
 
@@ -62,8 +62,8 @@ public class LDAPUtils {
         return doLDAPSearch(searchBase, searchAttrs, matchingAttributes);
     }
 
-    public static List<PersonBean> toPersonBeans(final NamingEnumeration<SearchResult> resultEnum) throws NamingException {
-        List<PersonBean> resultList = new ArrayList<PersonBean>();
+    public static List<Person> toPersonBeans(final NamingEnumeration<SearchResult> resultEnum) throws NamingException {
+        List<Person> resultList = new ArrayList<Person>();
         // Print result
         if (!resultEnum.hasMore()) {
             return resultList;
@@ -71,7 +71,7 @@ public class LDAPUtils {
 
         while (resultEnum.hasMore()) {
             Attributes attrs = resultEnum.next().getAttributes();
-            PersonBean person = new PersonBean();
+            Person person = new Person();
 
             // Get name
             String givenName = (String) attrs.get("givenName").get();
@@ -119,9 +119,9 @@ public class LDAPUtils {
             }
             
             //private String institution;
-            Attribute institutionAttr = attrs.get("institution");
-            if (institutionAttr != null) {
-                person.setInstitution((String) institutionAttr.get());
+            Attribute ouAttr = attrs.get("ou");
+            if (ouAttr != null) {
+                person.setOrganizationalUnit((String) ouAttr.get());
             }
 
             //private String buildingName;
@@ -183,7 +183,7 @@ public class LDAPUtils {
         String searchBase = "cn=person,dc=umu,dc=se";
         String escapedSearchString = escapeLDAPSearchFilter(searchString);
         SearchControls sc = new SearchControls();
-        sc.setReturningAttributes(new String[] {"givenName", "sn", "employeeType", "uid"});
+        sc.setReturningAttributes(new String[] {"givenName", "sn", "employeeType", "uid", "ou"});
         return createLdapContext().search(searchBase, "(cn=*" + escapedSearchString + "*)", sc);
     }
 
@@ -250,5 +250,4 @@ public class LDAPUtils {
         }
         return sb.toString();
     }
-
 }

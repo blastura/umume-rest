@@ -10,7 +10,7 @@ import javax.naming.directory.SearchResult;
 
 import org.junit.Test;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
 
 public class LDAPUtilsTest {
 
@@ -37,11 +37,11 @@ public class LDAPUtilsTest {
     public void testPersonBeaner() {
         try {
             NamingEnumeration<SearchResult> result = LDAPUtils.searchForUid("joel0001");
-            List<PersonBean> personList = LDAPUtils.toPersonBeans(result);
+            List<Person> personList = LDAPUtils.toPersonBeans(result);
 
             assertEquals(1, personList.size());
 
-            PersonBean aonjon = personList.get(0);
+            Person aonjon = personList.get(0);
 
             assertEquals("Anton", aonjon.getGivenName());
             assertEquals("Johansson", aonjon.getFamilyName());

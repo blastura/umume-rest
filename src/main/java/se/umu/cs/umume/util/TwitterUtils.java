@@ -7,7 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
 import se.umu.cs.umume.rest.resources.SearchResource;
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -16,8 +16,8 @@ import twitter4j.TwitterException;
 
 public class TwitterUtils {
     private static final Logger logger = LoggerFactory.getLogger(TwitterUtils.class);
-    public static List<PersonBean> getTweets(List<PersonBean> persons) {
-        for (PersonBean person : persons) {
+    public static List<Person> getTweets(List<Person> persons) {
+        for (Person person : persons) {
             String userName = person.getTwitterName();
             if (userName != null) {
                 Twitter twitter = new Twitter("umume", "soasoa");

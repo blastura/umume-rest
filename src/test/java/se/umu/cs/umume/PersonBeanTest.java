@@ -19,7 +19,7 @@ public class PersonBeanTest {
 
     @Test
     public void testJaxb() throws JAXBException {
-        PersonBean pb = new PersonBean();
+        Person pb = new Person();
         pb.setGivenName("Anton");
         pb.setFamilyName("Johansson");
         pb.setInstitution("TFE");
@@ -28,7 +28,7 @@ public class PersonBeanTest {
         emails.add("anton@student.umu.se");
         pb.setEmails(emails);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(PersonBean.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(Person.class);
 
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -42,7 +42,7 @@ public class PersonBeanTest {
         System.out.println("======= Unmarshalling =============");
         Unmarshaller um = jaxbContext.createUnmarshaller();
         Reader reader = new StringReader(writer.toString());
-        PersonBean umPb = (PersonBean) um.unmarshal(reader);
+        Person umPb = (Person) um.unmarshal(reader);
         assertEquals(pb.getEmails().get(0), umPb.getEmails().get(0));
         assertEquals(pb.getEmails().get(1), umPb.getEmails().get(1));
         assertEquals(pb, umPb);

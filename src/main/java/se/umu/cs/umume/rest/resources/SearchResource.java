@@ -20,7 +20,8 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
+import se.umu.cs.umume.rest.ErrorMessage;
 import se.umu.cs.umume.util.LDAPUtils;
 
 import com.sun.jersey.api.json.JSONWithPadding;
@@ -29,44 +30,55 @@ import com.sun.jersey.api.json.JSONWithPadding;
 public class SearchResource {
     private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
     private static @Context UriInfo uriInfo;
-
+    private static final String TO_SHORT_SEARCH = "Search string < 3 characters";
+    //JSONConfiguration.mapped().rootUnwrapping(false).build();
+    
     @GET
-    @Produces("application/javascript")
+    @Produces("application/x-javascript")
     public JSONWithPadding searchForUsers(@PathParam("searchString") String searchString,
             @QueryParam("callback") String callback) {
-        logger.info("Search for '{}'", searchString);
+        logger.info("JAVASCRIPT: Search for '{}'", searchString);
         try {
             if (searchString.length() < 3) {
-                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+                ErrorMessage msg = new ErrorMessage(TO_SHORT_SEARCH);
+                JSONWithPadding jwp = new JSONWithPadding(new GenericEntity<ErrorMessage>(msg) {}, callback);
+                Response r = Response.status(Status.BAD_REQUEST).entity(jwp).type("application/javascript").build();
+                throw new WebApplicationException(r);
             }
-            List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
-            for (PersonBean pb : result) {
+            List<Person> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
+            for (Person pb : result) {
                 pb.setResourceRef(UriBuilder.fromUri(uriInfo.getBaseUri()).path(UsersResource.class).build(pb.getUid()));
             }
-            return new JSONWithPadding(new GenericEntity<List<PersonBean>>(result) {}, callback);
+            //return new JSONWithPadding(new GenericEntity<List<PersonBean>>(result) {}, callback);
+            return new JSONWithPadding(new GenericEntity<List<Person>>(result) {}, callback);
         } catch (NamingException e) {
             logger.warn("Search Exception: {} for search '{}'", e.getMessage(), searchString);
-            Response r = Response.status(Status.BAD_REQUEST).entity(e.getMessage()).type("text/plain").build();
+            ErrorMessage msg = new ErrorMessage(e.getMessage());
+            JSONWithPadding jwp = new JSONWithPadding(new GenericEntity<ErrorMessage>(msg) {}, callback);
+            Response r = Response.status(Status.BAD_REQUEST).entity(jwp).type("application/javascript").build();
             throw new WebApplicationException(r);
         }
     }
     
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<PersonBean> searchForUsers(@PathParam("searchString") String searchString) {
-        logger.info("Search for '{}'", searchString);
+    public List<Person> searchForUsers(@PathParam("searchString") String searchString) {
+        logger.info("XML/JSONSearch for '{}'", searchString);
         try {
             if (searchString.length() < 3) {
-                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+                ErrorMessage msg = new ErrorMessage(TO_SHORT_SEARCH);
+                Response r = Response.status(Status.BAD_REQUEST).entity(msg).build();
+                throw new WebApplicationException(r);
             }
-            List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
-            for (PersonBean pb : result) {
+            List<Person> result = LDAPUtils.toPersonBeans(LDAPUtils.searchPerson(searchString));
+            for (Person pb : result) {
                 pb.setResourceRef(UriBuilder.fromUri(uriInfo.getBaseUri()).path(UsersResource.class).build(pb.getUid()));
             }
             return result;
         } catch (NamingException e) {
             logger.warn("Search Exception: {} for search '{}'", e.getMessage(), searchString);
-            Response r = Response.status(Status.BAD_REQUEST).entity(e.getMessage()).type("text/plain").build();
+            ErrorMessage msg = new ErrorMessage(e.getMessage());
+            Response r = Response.status(Status.BAD_REQUEST).entity(msg).build();
             throw new WebApplicationException(r);
         }
     }

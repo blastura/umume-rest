@@ -38,6 +38,7 @@
                 "./lib/test/logback-core-0.9.17.jar"
                 "./lib/test/servlet-api-2.5.jar"
                 "./lib/test/slf4j-api-1.5.8.jar"
+                "./lib/default/jersey-json-1.0.3.jar"
                 ))
 ;;(shell-command "find lib -name *.jar")
 

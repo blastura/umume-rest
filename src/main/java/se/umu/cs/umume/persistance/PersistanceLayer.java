@@ -11,7 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
 
 public class PersistanceLayer {
 
@@ -25,13 +25,13 @@ public class PersistanceLayer {
     //        logger.info("DB: " + PersistanceLayer.class.getResource("/thebrain.rsd").getFile());
     //    }
 
-    public static void addDatabaseInfo(List<PersonBean> persons) {
+    public static void addDatabaseInfo(List<Person> persons) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(databasePath);
             Statement stat = conn.createStatement();
             
-            for (PersonBean person : persons) {
+            for (Person person : persons) {
                 ResultSet rs = stat
                 .executeQuery("select * from Persons where UserName = \""
                         + person.getUid() + "\"");
@@ -52,7 +52,7 @@ public class PersistanceLayer {
         }
     }
 
-    public static void updateInfo(PersonBean person) {
+    public static void updateInfo(Person person) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(databasePath);

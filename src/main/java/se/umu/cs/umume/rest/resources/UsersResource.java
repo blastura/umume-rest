@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.umu.cs.umume.PersonBean;
+import se.umu.cs.umume.Person;
 import se.umu.cs.umume.persistance.PersistanceLayer;
 import se.umu.cs.umume.util.CASUtils;
 import se.umu.cs.umume.util.LDAPUtils;
@@ -35,10 +35,10 @@ public class UsersResource {
     // The Java method will process HTTP GET requests
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public PersonBean getUserXML(@PathParam("uid") String uid) {
+    public Person getUserXML(@PathParam("uid") String uid) {
         try {
             URI uri =  uriInfo.getAbsolutePath();
-            List<PersonBean> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
+            List<Person> result = LDAPUtils.toPersonBeans(LDAPUtils.searchForUid(uid));
             if (result.isEmpty()) {
                 throw new WebApplicationException(404);
             }
@@ -60,7 +60,7 @@ public class UsersResource {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateUser(@PathParam("uid") String uid,
-            PersonBean pb,
+            Person pb,
             @QueryParam("ticket") String ticket,
             @QueryParam("service") String service) {
         logger.info("Got PUT with ticket {} and service {}", ticket, service);
